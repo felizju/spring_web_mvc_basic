@@ -11,7 +11,7 @@ public class AgeController {
     // WEB-INF 폴더의 age.jsp를 열어주는 요청 처리
     @GetMapping("/spring/age")
     public String springAge(){
-        System.out.println("/spring/age GET요청 발생!");
+        System.out.println("/spring/age GET 요청 발생!");
         return "/WEB-INF/age.jsp";
     }
 
@@ -23,5 +23,7 @@ public class AgeController {
         model.addAttribute("result", txt);
         return "/WEB-INF/result.jsp";
     }
+
+
 
 }
