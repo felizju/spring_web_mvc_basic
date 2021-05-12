@@ -20,10 +20,6 @@
     li{
         text-decoration: none;
     }
-    button{
-        background: yellowgreen;
-        color: white;
-    }
 </style>
 </head>
 <body>
@@ -39,9 +35,7 @@
             <li># 평균 : ${detail.average} 점</li>
         </ul>
         
-        <form action="/score/list">
-            <button>목록</button>
-        </form>
+        <a href="/score/list">목록</a>
     </div>
 
 </body>
