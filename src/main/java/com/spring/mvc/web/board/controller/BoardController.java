@@ -34,7 +34,7 @@ public class BoardController {
     // 게시글 정보 저장 요청
     @PostMapping("/register")
     public String register(Board board){
-        log.info("/board/register POST 요청");
+        log.info("/board/register POST 요청" + board);
         boardService.register(board);
         return "redirect:/board/list";
     }

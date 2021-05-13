@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Repository // @Component 와 같음
+@Repository("mr") // @Component 와 같음
 @Log4j2
 public class MemoryScoreRepository implements ScoreRepository {
 

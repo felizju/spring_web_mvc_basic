@@ -10,10 +10,10 @@ public interface ScoreRepository {
     void save(Score score);
 
     // 점수 정보 삭제 기능
-    void remove(int stdNum);
+    void remove(int stuNum);
 
     // 개별 점수 조회 기능
-    Score findOne(int stdNum);
+    Score findOne(int stuNum);
 
     // 전체 점수 조회 기능
     List<Score> findAll();
