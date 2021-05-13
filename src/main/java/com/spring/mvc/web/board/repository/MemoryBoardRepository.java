@@ -21,38 +21,54 @@ public class MemoryBoardRepository implements BoardRepository {
         boardMap.put(3, new Board("고길동", "제목33", "내용33"));
     }
 
+
+    // 게시글 등록
     @Override
-    public void save(Board board) {
+    public void insertArticle(Board board) {
         boardMap.put(board.getBoardNum(), board);
-        log.info(boardMap);
     }
 
+
+    // 게시글 삭제
     @Override
-    public void remove(int boardNum) {
+    public void deleteArticle(int boardNum) {
         boardMap.remove(boardNum);
     }
 
+
+    // 게시글 내용 보기
     @Override
-    public Board findOne(int boardNum) {
+    public Board getArticleContent(int boardNum) {
         return boardMap.get(boardNum);
     }
 
+
+    // 게시글 전체 보기
     @Override
-    public List<Board> findAll() {
+    public List<Board> getArticles() {
         List<Board> boardList = new ArrayList<>();
-        for (int key : boardMap.keySet()) {
-            boardList.add(boardMap.get(key));
+        for (int boardNum : boardMap.keySet()) {
+            Board board = boardMap.get(boardNum);
+            boardList.add(board);
         }
         return boardList;
     }
 
+
+/*    // 게시글 수정 - 방법1
     @Override
-    public void modify(Board modArticle) {
-        Board target = boardMap.get(modArticle.getBoardNum());
+    public void modifyArticle(Board board) {
+        Board target = boardMap.get(board.getBoardNum());
         log.info("target: " + target);
-        target.setName(modArticle.getName());
-        target.setTitle(modArticle.getTitle());
-        target.setContent(modArticle.getContent());
+        target.setWriter(board.getWriter());
+        target.setTitle(board.getTitle());
+        target.setContent(board.getContent());
+    }*/
+
+    // 게시글 수정 - 방법2
+    @Override
+    public void modifyArticle(Board board) {
+        boardMap.put(board.getBoardNum(), board);
     }
 
 

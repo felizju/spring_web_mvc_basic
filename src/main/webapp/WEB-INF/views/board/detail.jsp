@@ -17,7 +17,9 @@
         # 글 번호 : ${board.boardNum} <br>
         # 작성자 : ${board.name} <br>
         # 제목 : ${board.title} <br>
-        # 내용 : ${board.content} <br>
+        # 내용 : 
+        <br>
+        <textarea rows="5" cols="30" disabled>${board.content}</textarea>
     </p>
     <a href="/board/list">글 목록보기</a><br>
     <a href="/board/modify?boardNum=${board.boardNum}">글 수정하기</a>

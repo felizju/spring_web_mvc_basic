@@ -6,19 +6,19 @@ import java.util.List;
 
 public interface BoardRepository {
 
-    // 게시글 저장 기능
-    void save(Board board);
+    // 게시글 등록
+    void insertArticle(Board board);
 
-    // 게시글 삭제 기능
-    void remove(int boardNum);
+    // 게시글 삭제
+    void deleteArticle(int boardNum);
 
-    // 게시글 하나 조회 기능
-    Board findOne(int boardNum);
+    // 게시글 내용 보기
+    Board getArticleContent(int boardNum);
 
-    // 게시글 전체 보기 기능
-    List<Board> findAll();
+    // 게시글 전체 보기
+    List<Board> getArticles();
 
-    // 게시글 수정 기능
-    void modify(Board board);
+    // 게시글 수정
+    void modifyArticle(Board board);
 
 }

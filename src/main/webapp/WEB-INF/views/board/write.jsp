@@ -13,21 +13,18 @@
 </head>
 <body>
     <h1>게시글 등록</h1>
-    <form action="/board/register" method="post">
+    <form action="/board/write" method="post">
         <p>
-           # 작성자: <input type="text" name="name">
-        </p>
-        <p>
-            # 제목 : <input type="text" name="title">
-        </p>
-        <p>
-            # 내용 :<br>
+            # 작성자: <input type="text" name="name"><br>
+            # 제목 : <input type="text" name="title"><br>
+            # 내용 :
+            <br>
             <textarea rows="5" cols="30" name="content"></textarea>
+            <br>
         </p>
         <button type="submit">등록</button>
     </form>
     <br>
     <a href="/board/list">글 목록보기</a>
-    
 </body>
 </html>

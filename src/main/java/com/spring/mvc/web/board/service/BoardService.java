@@ -5,6 +5,7 @@ import com.spring.mvc.web.board.repository.BoardRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -17,24 +18,48 @@ public class BoardService {
         this.boardRepository = boardRepository;
     }
 
-    public void register(Board board){
-        boardRepository.save(board);
+
+    // 게시글 등록
+    public void insertArticle(Board board){
+        boardRepository.insertArticle(board);
     }
 
-    public List<Board> getBoardList(){
-        return boardRepository.findAll();
+
+    // 게시글 삭제
+    public void deleteArticle(int boardNum){
+        boardRepository.deleteArticle(boardNum);
     }
 
-    public void delete(int boardNum){
-        boardRepository.remove(boardNum);
+
+    // 게시글 전체 보기
+    public List<Board> getArticles(){
+        List<Board> temp = boardRepository.getArticles();
+        List<Board> boardList = new ArrayList<>();
+        for (int i = temp.size()-1; i >=0 ; i--) {
+            Board board = temp.get(i);
+            boardList.add(board);
+        }
+        return boardList;
     }
 
-    public Board getDetail(int boardNum){
-        return boardRepository.findOne(boardNum);
+
+    // 게시글 내용 보기
+    public Board getArticleContent(int boardNum, boolean viewFlag){
+        Board detail = boardRepository.getArticleContent(boardNum);
+        if(viewFlag){
+            detail.upViewCnt();
+        }
+        return detail;
     }
 
-    public void modify(Board board){
-        boardRepository.modify(board);
+
+/*    public void modify(Board board){
+        boardRepository.modifyArticle(board);
+    }*/
+
+    // 게시글 수정
+    public void modifyArticle(Board board){
+        boardRepository.modifyArticle(board);
     }
 
 }
