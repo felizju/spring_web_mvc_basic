@@ -18,7 +18,7 @@
         <input type="hidden" name="vf" value="false">
         <p>
             # 글번호 : ${board.boardNum}<br>
-            # 작성자: <input type="text" name="name" value="${board.name}"><br>
+            # 작성자: <input type="text" name="writer" value="${board.writer}"><br>
             # 제목 : <input type="text" name="title" value="${board.title}"><br>
             # 내용 :
             <br>

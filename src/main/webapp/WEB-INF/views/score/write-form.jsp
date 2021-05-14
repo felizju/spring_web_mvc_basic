@@ -51,6 +51,7 @@
     <hr>
 
     <ul class="score-list">
+        <li>총 학생 수 : ${count}명</li>
         <c:forEach var="score" items="${scoreList}">
             <li># 학번: ${score.stuNum}, 이름: <a href="/score/detail?stuNum=${score.stuNum}">${score.name}</a>, 국어: ${score.kor}점, 영어: ${score.eng}점, 수학: ${score.math}점, 총점: ${score.total}점, 평균: ${score.average}점
                 <a class="del-btn" href="/score/delete?stuNum=${score.stuNum}">삭제</a>

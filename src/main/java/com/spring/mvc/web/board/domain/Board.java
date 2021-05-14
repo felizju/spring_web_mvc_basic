@@ -12,11 +12,11 @@ public class Board {
 
     private static int sequence;
 
-    private int boardNum; // 글번호
+    private int boardNum; // 글번호 board_no
     private String writer; // 작성자
     private String title; // 글제목
     private String content; // 글내용
-    private int viewCnt; // 조회수
+    private int viewCnt; // 조회수 view_cnt
 
     public Board(){
         this.boardNum = ++sequence;

@@ -47,6 +47,7 @@ public class BoardController {
     public String list(Model model){
         log.info("/board/list GET 요청");
         model.addAttribute("boardList", boardService.getArticles());
+        model.addAttribute("count", boardService.getCount());
         return "board/list";
     }
 
@@ -96,6 +97,6 @@ public class BoardController {
         board.setContent(modBoard.getContent());
         boardService.modifyArticle(board);
 
-        return "redirect:/board/content?boardNo=" + modBoard.getBoardNum() + "&vf=false";
+        return "redirect:/board/detail?boardNum=" + modBoard.getBoardNum() + "&vf=false";
     }
 }

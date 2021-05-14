@@ -15,7 +15,7 @@
     <h1>게시글 등록</h1>
     <form action="/board/write" method="post">
         <p>
-            # 작성자: <input type="text" name="name"><br>
+            # 작성자: <input type="text" name="writer"><br>
             # 제목 : <input type="text" name="title"><br>
             # 내용 :
             <br>

@@ -12,6 +12,9 @@
             width: 500px;
             text-align: center;
         }
+        h3{
+            color : red;
+        }
     </style>
 </head>
 <body>
@@ -35,7 +38,7 @@
                 <c:forEach var="board" items="${boardList}">
                     <tr>
                         <td>${board.boardNum}</td>
-                        <td>${board.name}</td>
+                        <td>${board.writer}</td>
                         <td><a href="/board/detail?boardNum=${board.boardNum}&vf=true">${board.title}</a></td>
                         <td>${board.viewCnt}</td>
                         <td><a href="/board/delete?boardNum=${board.boardNum}">삭제</a></td>
@@ -46,6 +49,7 @@
         </table>
     </c:if>
 
+    <h3>## 총 게시물 수 : ${count}건</h3>
     <p>
         <a href="/board/write">게시글 작성하기</a>
     </p>
