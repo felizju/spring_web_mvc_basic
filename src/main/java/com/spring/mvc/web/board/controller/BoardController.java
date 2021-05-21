@@ -3,6 +3,8 @@ package com.spring.mvc.web.board.controller;
 import com.spring.mvc.web.board.domain.Board;
 import com.spring.mvc.web.board.domain.ModifyBoard;
 import com.spring.mvc.web.board.service.BoardService;
+import com.spring.mvc.web.common.paging.Criteria;
+import com.spring.mvc.web.common.paging.PageMaker;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -42,12 +44,24 @@ public class BoardController {
     }
 
 
-    // 게시글 전체 조회
-    @GetMapping("/list")
+    // 게시글 전체 조회1 - 페이징 처리 없는 처리
+/*    @GetMapping("/list")
     public String list(Model model){
         log.info("/board/list GET 요청");
         model.addAttribute("boardList", boardService.getArticles());
         model.addAttribute("count", boardService.getCount());
+        return "board/list";
+    }*/
+    
+    // 게시글 전체 조회2 - 페이징 처리
+    @GetMapping("/list")
+    public String list(Criteria criteria, Model model){
+        log.info("/board/list GET 요청");
+        model.addAttribute("boardList", boardService.getArticles(criteria));
+
+        // 페이지 정보 만들어서 jsp에게 보내기
+        model.addAttribute("pageMaker", new PageMaker(criteria, boardService.getTotalCount()));
+
         return "board/list";
     }
 

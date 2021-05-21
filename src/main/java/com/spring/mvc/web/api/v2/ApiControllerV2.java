@@ -2,6 +2,7 @@ package com.spring.mvc.web.api.v2;
 
 import com.spring.mvc.web.board.domain.Board;
 import com.spring.mvc.web.board.service.BoardService;
+import com.spring.mvc.web.common.paging.Criteria;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -63,7 +64,7 @@ public class ApiControllerV2 {
 
     @GetMapping("/board-list")
     public List<Board> list(){
-        return boardService.getArticles();
+        return boardService.getArticles(new Criteria());
     }
 
 

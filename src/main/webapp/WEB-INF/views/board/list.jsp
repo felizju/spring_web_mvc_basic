@@ -2,24 +2,46 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html lang="ko">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title></title>
-
     <link rel="stylesheet" href="/css/main.css">
-
     <style>
         table {
             width: 500px;
             text-align: center;
         }
-        h3{
-            color : red;
+
+        h3 {
+            color: red;
+        }
+
+        .pagination {
+            width: 60%;
+            margin-top: 10px;
+            list-style: none;
+            display: flex;
+        }
+
+        .pagination>li {
+            justify-content: flex-end;
+        }
+
+        .pagination>li>a:hover {
+            color: yellowgreen;
+        }
+
+        .pagination>li.active>a {
+            font-weight: bold;
+            color: orangered;
+            font-size: 1.1em;
         }
     </style>
 </head>
+
 <body>
     <c:if test="${boardList.size() <= 0}">
         <p>게시물이 존재하지 않습니다.</p>
@@ -50,11 +72,56 @@
 
             </tbody>
         </table>
+
+        <!-- 페이지 영역 -->
+        <ul class="pagination">
+
+            <!-- ${pageMaker} -->
+
+            <c:if test="${pageMaker.prev}">
+                <li>
+                    <a href="/board/list?page=${pageMaker.beginPage - 1}">[prev]</a>
+                </li>
+            </c:if>
+
+            <!-- li*5>a{[$]} -->
+            <c:forEach var="i" begin="${pageMaker.beginPage}" end="${pageMaker.endPage}" step="1">
+                <li data-page="${i}"><a href="/board/list?page=${i}">[${i}]</a></li>
+            </c:forEach>
+
+
+            <c:if test="${pageMaker.next}">
+                <li>
+                    <a href="/board/list?page=${pageMaker.endPage + 1}">[next]</a>
+                </li>
+            </c:if>
+
+        </ul>
     </c:if>
 
-    <h3>## 총 게시물 수 : ${count}건</h3>
     <p>
         <a href="/board/write">게시글 작성하기</a>
     </p>
+
+    <script>
+
+
+        // 현재 위치한 페이지 넘버에 클래스 active를 부여하는 함수 정의
+        function appendPageActive(curPageNum){
+            const $ul = document.querySelector('.pagination');
+            for(let $li of [...$ul.children]){
+                if($li.dataset.page === curPageNum){
+                    $li.classList.add('active');
+                }
+            }
+        }
+
+        (function () {
+            appendPageActive('${pageMaker.criteria.page}');
+        }());
+
+    </script>
+
 </body>
+
 </html>

@@ -3,6 +3,7 @@ package com.spring.mvc.web.board.service;
 import com.spring.mvc.web.board.domain.Board;
 import com.spring.mvc.web.board.repository.BoardMapper;
 import com.spring.mvc.web.board.repository.BoardRepository;
+import com.spring.mvc.web.common.paging.Criteria;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -36,14 +37,21 @@ public class BoardService {
 
 
     // 게시글 전체 보기
-    public List<Board> getArticles(){
-        List<Board> temp = boardRepository.getArticles();
-        List<Board> boardList = new ArrayList<>();
-        for (int i = temp.size()-1; i >=0 ; i--) {
-            Board board = temp.get(i);
-            boardList.add(board);
-        }
-        return boardList;
+    public List<Board> getArticles(Criteria criteria){
+        // 내림차순 로직
+//        List<Board> temp = boardRepository.getArticles();
+//        List<Board> boardList = new ArrayList<>();
+//        for (int i = temp.size()-1; i >=0 ; i--) {
+//            Board board = temp.get(i);
+//            boardList.add(board);
+//        }
+//        return boardList;
+        return boardRepository.getArticles(criteria);
+    }
+
+    // 총 게시물 수 확인
+    public int getTotalCount(){
+        return boardRepository.getTotalCount();
     }
 
 
@@ -67,9 +75,5 @@ public class BoardService {
         boardRepository.modifyArticle(board);
     }
 
-    // 게시글 총 건수 조회
-    public int getCount(){
-        return boardRepository.getCount();
-    }
 
 }
