@@ -9,10 +9,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -54,13 +51,14 @@ public class BoardController {
     }*/
     
     // 게시글 전체 조회2 - 페이징 처리
+    // 게시글 전체 조회3 - 검색 + 페이징 처리
     @GetMapping("/list")
     public String list(Criteria criteria, Model model){
         log.info("/board/list GET 요청");
         model.addAttribute("boardList", boardService.getArticles(criteria));
 
         // 페이지 정보 만들어서 jsp에게 보내기
-        model.addAttribute("pageMaker", new PageMaker(criteria, boardService.getTotalCount()));
+        model.addAttribute("pageMaker", new PageMaker(criteria, boardService.getTotalCount(criteria)));
 
         return "board/list";
     }
@@ -75,10 +73,10 @@ public class BoardController {
 
     // 게시글 세부 정보
     @GetMapping("/detail")
-    public String detail(int boardNum, @RequestParam("vf") boolean viewCntFlag, Model model){
+    public String detail(int boardNum, @RequestParam("vf") boolean viewCntFlag, @ModelAttribute("cri") Criteria criteria, Model model){
         Board board = boardService.getArticleContent(boardNum, viewCntFlag);
         model.addAttribute("board", board);
-        log.info("/board/detail GET 요청" + board);
+//        model.addAttribute("cri", criteria); @ModelAttribute("cri") 쓰면 생략
         return "board/detail";
     }
 

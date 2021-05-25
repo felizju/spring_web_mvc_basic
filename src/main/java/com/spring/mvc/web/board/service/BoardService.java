@@ -46,12 +46,15 @@ public class BoardService {
 //            boardList.add(board);
 //        }
 //        return boardList;
-        return boardRepository.getArticles(criteria);
+//        return boardRepository.getArticles(criteria);
+
+        // 검색쿼리
+        return boardRepository.getSearchArticles(criteria);
     }
 
     // 총 게시물 수 확인
-    public int getTotalCount(){
-        return boardRepository.getTotalCount();
+    public int getTotalCount(Criteria criteria){
+        return boardRepository.getTotalCount(criteria);
     }
 
 

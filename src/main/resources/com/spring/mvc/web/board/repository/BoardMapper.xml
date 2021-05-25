@@ -24,12 +24,14 @@
     <!-- 페이징 없는 처리 - 게시글 전체 보기1 -->
 <!--    <select id="getArticles" resultMap="boardMap">
         SELECT * FROM board
-    </select>   -->
+    </select>-->
 
 
     <!-- 페이징 쿼리 적용 - 게시글 전체 보기2 -->
     <select id="getArticles" resultMap="boardMap">
-    <!-- 특수기호 사용 위함 -->
+<!--
+     특수기호 사용 위함
+-->
        <![CDATA[
         SELECT
             board_no, writer, title, content, view_cnt
@@ -43,9 +45,59 @@
     </select>
 
 
+    <!-- 검색 쿼리 + 페이징 쿼리 적용 - 게시글 전체 보기3 -->
+    <select id="getSearchArticles" resultMap="boardMap">
+        <!-- 특수기호 사용 위함 -->
+        <![CDATA[
+        SELECT
+            board_no, writer, title, content, view_cnt
+        FROM
+            (SELECT  /* +INDEX DESC(board pk_board) */
+                rownum rn, board_no, writer, title, content, view_cnt
+            FROM board
+            WHERE
+            ]]>
+                <if test = "type == 'title'">
+                    title LIKE '%' || #{keyword} || '%' AND
+                </if>
+                <if test = "type == 'writer'">
+                    writer LIKE '%' || #{keyword} || '%' AND
+                </if>
+                <if test = "type == 'content'">
+                    content LIKE '%' || #{keyword} || '%' AND
+                </if>
+                <if test = "type == 'titleAndContent'">
+                (title LIKE '%' || #{keyword} || '%'
+                    OR content '%' || #{keyword} || '%') AND
+                </if>
+                <![CDATA[
+                    rownum <= #{page} * #{amount}
+                    )
+                WHERE rn > (#{page}-1) * #{amount}
+                ]]>
+    </select>
+
+
+
+
     <!-- 총 게시글 수 조회 -->
     <select id="getTotalCount" resultType="int">
         SELECT COUNT(*) FROM board
+        <if test = "type == 'title'">
+
+            WHERE  title LIKE '%' || #{keyword} || '%'
+        </if>
+        <if test = "type == 'writer'">
+            WHERE  writer LIKE '%' || #{keyword} || '%'
+        </if>
+        <if test = "type == 'content'">
+            WHERE content LIKE '%' || #{keyword} || '%'
+        </if>
+        <if test = "type == 'titleAndContent'">
+            WHERE (title LIKE '%' || #{keyword} || '%'
+            OR content '%' || #{keyword} || '%')
+        </if>
+
     </select>
 
 

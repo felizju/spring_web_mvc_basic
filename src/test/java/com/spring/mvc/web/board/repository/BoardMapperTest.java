@@ -77,4 +77,20 @@ class BoardMapperTest {
         System.out.println("========================================================================");
     }
 
+    @Test
+    @DisplayName("제목으로 검색된 게시물 리스트를 반환해야 한다.")
+    void searchTitleTest(){
+        Criteria criteria = new Criteria();
+        criteria.setPage(1);
+        criteria.setAmount(10);
+        criteria.setKeyword("마이");
+        criteria.setType("writer");
+        System.out.println("========================================================================");
+
+        for (Board searchArticle : mapper.getSearchArticles(criteria) ) {
+            System.out.println(searchArticle);
+        }
+        System.out.println("========================================================================");
+    }
+
 }

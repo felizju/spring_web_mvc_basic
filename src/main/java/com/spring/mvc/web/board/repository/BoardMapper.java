@@ -18,14 +18,17 @@ public interface BoardMapper {
     // 게시글 내용 보기
     Board getArticleContent(int boardNum);
 
-    // 게시글 전체 보기 - 페이징 없는 버전
+    // 게시글 전체 보기 1- 페이징 없는 버전
      List<Board> getArticles();
 
-    // 게시글 전체 보기 - 페이징 처리 버전
+    // 게시글 전체 보기 2 - 페이징 처리 버전
     List<Board> getArticles(Criteria criteria);
 
+    // 게시글 전체 보기 3 - 검색 + 페이징 처리 버전
+    List<Board> getSearchArticles(Criteria criteria);
+
     // 총 게시물 수 조회
-    int getTotalCount();
+    int getTotalCount(Criteria criteria);
 
     // 게시글 수정
     void modifyArticle(Board board);
