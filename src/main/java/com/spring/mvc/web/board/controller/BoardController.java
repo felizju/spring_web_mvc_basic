@@ -54,7 +54,7 @@ public class BoardController {
     // 게시글 전체 조회3 - 검색 + 페이징 처리
     @GetMapping("/list")
     public String list(Criteria criteria, Model model){
-        log.info("/board/list GET 요청");
+        log.info("/board/list GET 요청" + criteria);
         model.addAttribute("boardList", boardService.getArticles(criteria));
 
         // 페이지 정보 만들어서 jsp에게 보내기

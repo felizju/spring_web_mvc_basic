@@ -7,8 +7,11 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- static-head include -->
+    <%@ include file="../include/static-head.jsp" %>
+   
     <title></title>
-    <link rel="stylesheet" href="/css/main.css">
     <style>
         table {
             width: 500px;
@@ -152,10 +155,12 @@
         </form>
     </div>
 
-
     <p>
         <a href="/board/write">게시글 작성하기</a>
     </p>
+
+    <!-- footer include -->
+    <%@ include file="../include/footer.jsp" %>
 
     <script>
         // 현재 위치한 페이지 넘버에 클래스 active를 부여하는 함수 정의

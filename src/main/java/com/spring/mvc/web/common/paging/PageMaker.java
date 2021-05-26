@@ -66,7 +66,7 @@ public class PageMaker {
                 .queryParam("page", page)
                 .queryParam("type", criteria.getType())
                 .queryParam("keyword", criteria.getKeyword())
-                .queryParam("amount", criteria.getAmount())
+                .queryParam("amount", amount)
                 .build();
         return build.toString();
     }

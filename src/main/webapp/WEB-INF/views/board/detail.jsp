@@ -6,10 +6,13 @@
 <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title></title>
-<style>
 
-</style>
+<!-- static-head include -->
+<%@ include file="../include/static-head.jsp" %>
+
+<title></title>
+<style></style>
+
 </head>
 <body>
     <h1>${board.boardNum}번 게시물 내용</h1>
@@ -26,5 +29,9 @@
     <a href="/board/list?page=${cri.page}&type=${cri.type}&keyword=${cri.keyword}&amount=${cri.amount}">글 목록보기</a>
 
     <a href="/board/modify?boardNum=${board.boardNum}&vf=false">글 수정하기</a>
+
+    <!-- footer include -->
+    <%@ include file="../include/footer.jsp" %>
+
 </body>
 </html>
