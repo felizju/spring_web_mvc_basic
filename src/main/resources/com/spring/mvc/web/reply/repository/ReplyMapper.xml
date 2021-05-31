@@ -41,10 +41,34 @@
         WHERE reply_no = #{replyNo}
     </select>
 
-    <!-- 전체 댓글 조회 -->
+
+<!--    &lt;!&ndash; 전체 댓글 목록 조회 &ndash;&gt;
     <select id="getList" resultMap="replyMap">
-        SELECT * FROM tbl_reply
-        WHERE board_no = #{board_no}
+    SELECT * FROM tbl_reply
+    WHERE board_no = #{board_no}
+    </select>-->
+
+    <!-- 전체 댓글 목록 조회 - paging 처리 -->
+    <select id="getList" resultMap="replyMap">
+        <![CDATA[
+         SELECT  reply_no, board_no, reply_text, reply_writer, reply_date
+         FROM
+           (
+            SELECT /*+INDEX(tbl_reply pk_reply) */
+              rownum rn,  reply_no, board_no, reply_text, reply_writer, reply_date
+            FROM tbl_reply
+            WHERE board_no =  #{bno}
+                AND rownum <= #{cri.page} * #{cri.amount}
+           )
+         WHERE rn > (#{cri.page} -1) * #{cri.amount}
+        ]]>
+    </select>
+
+    <!-- 댓글 개수 조회 -->
+    <select id="getCount" resultType="int">
+        SELECT COUNT(*)
+        FROM tbl_reply
+        WHERE board_no = #{boardNo}
     </select>
 
 </mapper>

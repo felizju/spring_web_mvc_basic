@@ -37,14 +37,14 @@ class ReplyMapperTest {
         System.out.println("read = " + read);
     }
     
-    @Test
+/*    @Test
     @DisplayName("특정 게시물의 댓글 목록을 조회")
     void getListTest(){
         List<Reply> list = replyMapper.getList(8);
         for (Reply reply : list) {
             System.out.println(reply);
         }
-    }
+    }*/
 
     @Test
     @DisplayName("특정 게시물의 댓글 수정")
