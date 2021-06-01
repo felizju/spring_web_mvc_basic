@@ -68,7 +68,7 @@ public class ReplyApiController {   // 비동기 방식 Api
     // 댓글 삭제 요청 처리
     @DeleteMapping("/{rno}")
     public ResponseEntity<String> modify(@PathVariable("rno") int replyNo){
-        replyService.remove(replyNo);
+//        replyService.remove(replyNo);
         log.info("/api/v1/reply/" + replyNo + "DELETE - ");
         return replyService.remove(replyNo) ? new ResponseEntity<>("deleteSuccess", HttpStatus.OK) : new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }

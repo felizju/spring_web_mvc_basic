@@ -108,7 +108,7 @@
                 <!-- Modal Header -->
                 <div class="modal-header" style="background: #343A40; color: white;">
                     <h4 class="modal-title">댓글 수정하기</h4>
-                    <button type="button" class="close text-white" data-dismiss="modal">&times;</button>
+                    <button type="button" class="close text-white" data-dismiss="modal">X</button>
                 </div>
 
                 <!-- Modal body -->
@@ -138,7 +138,7 @@
 
 
     <script>
-    // 댓글 처리 JS
+        // 댓글 처리 JS
         // 즉시 실행 함수
         $(function () {
             // 원본 글 번호
@@ -230,7 +230,7 @@
                         "         <b>" + reply.replyWriter + "</b>" +
                         "       </span>" +
                         "       <span class='offset-md-6 col-md-3 text-right'><b>" + formatDate(reply
-                        .replyDate) +
+                            .replyDate) +
                         "       </b></span>" +
                         "    </div><br>" +
                         "    <div class='row'>" +
@@ -258,8 +258,8 @@
 
             // 댓글 목록 비동기 요청처리 함수
             function getReplyList(page) {
-                fetch('/api/v1/reply/' + boardNum + "/" + page)
-                    .then(res => res.json())
+                fetch('/api/v1/reply/' + boardNum + "/" + page) // fetch(url)
+                    .then(res => res.json()) // .then 으로 reponse 받기
                     .then(replyMap => {
                         console.log(replyMap);
                         makeReplyListDOM(replyMap); // 맵 받음
@@ -279,6 +279,133 @@
                 // getReplyList($(this).attr('href')); // JQuery에서 $() ==> e.target
 
             });
+
+
+            // 댓글 등록 버튼 클릭 이벤트 - JQuery 이벤트
+            $('#replyAddBtn').on('click', e => {
+
+                // 서버로 댓글 내용을 전송해서 DB에 저장
+                const reqInfo = {
+                    method: 'POST', // 요청 방식
+                    headers: { // 요청 헤더 내용
+                        'content-type': 'application/json'
+                    },
+                    // 서버로 전송할 데이터 (JSON)
+                    body: JSON.stringify( // javascript -> JSON 으로 변환
+                        {
+                            boardNo: boardNum,
+                            replyText: $('#newReplyText').val(),
+                            replyWriter: $('#newReplyWriter').val()
+                        }
+                    )
+                };
+                fetch('/api/v1/reply', reqInfo) // post는 객체를 하나 더 넣어줘야함 
+                    .then(res => res.text()) // "insertSuccess" text()로 받기
+                    .then(msg => {
+                        if (msg === 'insertSuccess') {
+                            getReplyList(1);
+
+                            // 등록 후 남아있는 댓글 지우는 후속처리
+                            $('#newReplyText').val('');
+                            $('#newReplyWriter').val('');
+                        } else {
+                            alert('댓글 등록에 실패했습니다.');
+                        }
+                    })
+            });
+
+
+            //댓글 수정버튼 클릭 이벤트
+            const $modal = $('#replyModifyModal');
+            $('#replyData').on('click', '#replyModBtn', e => {
+                //console.log("수정버튼 클릭!");
+                //모달 띄우기
+                $modal.modal('show');
+
+                //기존 댓글내용 가져오기
+                const originText = e.target.parentNode.previousElementSibling.textContent;
+                // console.log(originText);
+                $('#modReplyText').val(originText);
+
+                // 모달이 열릴 때 모달안에 댓글번호 넣어놓기
+                const replyId = e.target.parentNode.parentNode.parentNode.dataset.replyid;
+                // console.log(replyId);
+
+                $('#modReplyId').val(replyId);
+
+            });
+
+
+            //모달창 닫기 이벤트
+            $('.modal-header button, .modal-footer button:last-child').on('click', e => {
+                $modal.modal('hide');
+
+            });
+
+
+            // 댓글 수정 요청 이벤트
+            $('#replyModBtn').on('click', e => {
+                // 댓글 번호
+                const replyId = $('#modReplyId').val();
+                // 수정된 댓글 내용
+                const replyText = $('#modReplyText').val();
+                console.log("댓글 번호 : "+replyId);
+                console.log("댓글 내용 : "+replyText);
+
+                const reqInfo = {
+                    method: 'PUT',
+                    headers: {
+                        'content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        replyNo: replyId,
+                        replyText: replyText,
+                    })
+                };
+                fetch('/api/v1/reply/' + replyId, reqInfo)
+                    .then(res => res.text())
+                    .then(msg => {
+                        if (msg === 'modifySuccess') {
+                            $modal.modal('hide');
+                            getReplyList(1);
+                        } else {
+                            alert("댓글 수정에 실패했습니다.");
+                        }
+                    })
+            });
+
+
+
+            // 댓글 삭제 요청 이벤트
+            $('#replyData').on('click', '#replyDelBtn', e => {
+
+                if(!confirm('삭제하시겠습니까?')){
+                    return;
+                }
+
+                console.log("삭제버튼 클릭!");
+
+                // 댓글 번호 찾아오기
+                const replyId = e.target.parentNode.parentNode.parentNode.dataset.replyid;
+                
+                console.log("댓글번호 : "+replyId);
+                
+                const reqInfo = {
+                    method : 'DELETE'
+                };
+                
+                fetch('/api/v1/reply/' + replyId, reqInfo)
+                    .then(res => res.text())
+                    .then(msg => {
+                        if (msg === 'deleteSuccess') {
+                            getReplyList(1);
+                        } else {
+                            alert("댓글 삭제에 실패했습니다.");
+                        }
+                    })
+
+            });
+
 
         });
     </script>
