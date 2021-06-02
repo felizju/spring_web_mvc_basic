@@ -7,21 +7,11 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-    <!-- static-head include -->
-    <%@ include file="../include/static-head.jsp" %>
-   
-    <title></title>
+
+    <title>board/list</title>
     <style>
-        table {
-            width: 500px;
-            text-align: center;
-        }
 
-        h3 {
-            color: red;
-        }
-
+        
         .pagination {
             width: 60%;
             margin-top: 10px;
@@ -31,6 +21,12 @@
 
         .pagination>li {
             justify-content: flex-end;
+            margin-right: 5px;
+        }
+
+        .pagination>li>a {
+            text-decoration: none;
+            color: black;
         }
 
         .pagination>li>a:hover {
@@ -63,9 +59,17 @@
             text-decoration: none;
         }
     </style>
+    <link rel="stylesheet" href="/css/main.css">
+
+    <!-- static-head include -->
+    <%@ include file="../include/static-head.jsp" %>
+
 </head>
 
 <body>
+
+    <%@ include file="../include/header.jsp" %>
+
     <c:if test="${boardList.size() <= 0}">
         <p>게시물이 존재하지 않습니다.</p>
     </c:if>
@@ -140,9 +144,9 @@
     <!-- 검색창 영역 -->
     <div class="search">
         <form action="/board/list" id="search-form">
-            
+
             <input type="hidden" name="amount" value="${pageMaker.criteria.amount}">
-            
+
             <select name="type">
                 <option value="title" ${pageMaker.criteria.type=='title' ? 'selected' : '' }>제목</option>
                 <option value="content" ${pageMaker.criteria.type=='content' ? 'selected' : '' }>내용</option>
