@@ -11,7 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import javax.servlet.http.HttpSession;
 
 @Controller
 @Log4j2
@@ -25,21 +25,25 @@ public class BoardController {
         this.boardService = boardService;
     }
 
-    // 게시글 등록 화면 요청
+    // 게시글 작성 화면 요청
     @GetMapping("/write")
-    public String write(){
+    public String write(HttpSession session){
+
+//        if (session.getAttribute("loginUser") == null) {
+//            return "redirect:/member/sign-in";
+//        }
+
         log.info("/board/register GET 요청");
         return "board/write";
     }
 
-    // 게시글 등록 처리 요청
+    // 게시글 작성 처리 요청
     @PostMapping("/write")
     public String write(Board board){
         log.info("/board/register POST 요청" + board);
         boardService.insertArticle(board);
         return "redirect:/board/list";
     }
-
 
     // 게시글 전체 조회1 - 페이징 처리 없는 처리
 /*    @GetMapping("/list")

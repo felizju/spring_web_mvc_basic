@@ -7,11 +7,8 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>board/list</title>
     <style>
-
-        
         .pagination {
             width: 60%;
             margin-top: 10px;
@@ -78,7 +75,6 @@
 
         <h1>게시글 목록</h1>
         <div class="amount">
-
             <%-- /board/list로 이동, pageMaker.makeParam(현재페이지 = pageMaker.criteria.page) & amount = 고정값  --%>
             <a href="/board/list${pageMaker.makeParam(pageMaker.criteria.page,10)}">10</a>
             <a href="/board/list${pageMaker.makeParam(pageMaker.criteria.page,20)}">20</a>
@@ -86,29 +82,34 @@
         </div>
 
         <table border="1">
-            <tbody>
+            <tr>
+                <td>글번호</td>
+                <td>작성자</td>
+                <td>글제목</td>
+                <td>조회수</td>
+                <td>비고</td>
+            </tr>
+
+            <%-- 컨트롤러가 가져온 게시글 데이터를 반복하여 출력하세요. --%>
+            <%-- 게시물 개수가 0개일 경우 목록대신 "게시물이 존재하지 않습니다." 출력 --%>
+
+            <c:forEach var="board" items="${boardList}">
                 <tr>
-                    <td>글번호</td>
-                    <td>작성자</td>
-                    <td>글제목</td>
-                    <td>조회수</td>
-                    <td>비고</td>
+                    <td>${board.boardNum}</td>
+                    <td>${board.writer}</td>
+                    <%-- <td><a href="/board/detail?boardNum=${board.boardNum}&vf=true">${board.title}</a></td> --%>
+                    <td>
+                        <a
+                            href="/board/detail${pageMaker.makeParam(pageMaker.criteria.page)}&boardNum=${board.boardNum}&vf=true">${board.title}</a>
+                    </td>
+                    <td>${board.viewCnt}</td>
+                    <td>
+                        <c:if test="${board.writer == loginUser.account || loginUser.auth == 'ADMIN'}">
+                            <a href="/board/delete?boardNum=${board.boardNum}">삭제</a>
+                        </c:if>
+                    </td>
                 </tr>
-
-                <c:forEach var="board" items="${boardList}">
-                    <tr>
-                        <td>${board.boardNum}</td>
-                        <td>${board.writer}</td>
-                        <%-- <td><a href="/board/detail?boardNum=${board.boardNum}&vf=true">${board.title}</a></td> --%>
-                        <td><a
-                                href="/board/detail${pageMaker.makeParam(pageMaker.criteria.page)}&boardNum=${board.boardNum}&vf=true">${board.title}</a>
-                        </td>
-                        <td>${board.viewCnt}</td>
-                        <td><a href="/board/delete?boardNum=${board.boardNum}">삭제</a></td>
-                    </tr>
-                </c:forEach>
-
-            </tbody>
+            </c:forEach>
         </table>
 
         <!-- 페이지 영역 -->
@@ -119,7 +120,6 @@
                 <li>
                     <%-- <a href="/board/list?page=${pageMaker.beginPage - 1}">[prev]</a> --%>
                     <a href="/board/list${pageMaker.makeParam(pageMaker.beginPage-1)}">[prev]</a>
-
                 </li>
             </c:if>
 
@@ -128,15 +128,12 @@
                 <li data-page="${i}"><a href="/board/list${pageMaker.makeParam(i)}">[${i}]</a></li>
             </c:forEach>
 
-
             <c:if test="${pageMaker.next}">
                 <li>
                     <%-- <a href="/board/list?page=${pageMaker.endPage + 1}">[next]</a> --%>
                     <a href="/board/list${pageMaker.makeParam(pageMaker.endPage+1)}">[next]</a>
-
                 </li>
             </c:if>
-
         </ul>
     </c:if>
 
@@ -167,7 +164,7 @@
     <%@ include file="../include/footer.jsp" %>
 
     <script>
-        // 현재 위치한 페이지 넘버에 클래스 active를 부여하는 함수 정의
+        // 현재 위치한 페이지 넘버에 클래스 active 를 부여하는 함수 정의
         function appendPageActive(curPageNum) {
             const $ul = document.querySelector('.pagination');
             for (let $li of [...$ul.children]) {

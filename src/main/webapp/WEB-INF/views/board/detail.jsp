@@ -7,7 +7,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
+
     <title></title>
 
     <!-- static-head include -->
@@ -15,6 +15,7 @@
 </head>
 
 <body>
+    <%@ include file="../include/header.jsp" %>
 
     <div class="container">
         <div class="row">
@@ -30,7 +31,11 @@
                 <%-- <a href="/board/list${}">글 목록보기</a><br> --%>
                 <a href="/board/list?page=${cri.page}&type=${cri.type}&keyword=${cri.keyword}&amount=${cri.amount}">글
                     목록보기</a>&nbsp;
-                <a href="/board/modify?boardNum=${board.boardNum}&vf=false">글 수정하기</a>
+
+                <c:if test="${article.writer == loginUser.account || loginUser.auth == 'ADMIN'}">
+                    <a href="/board/modify?boardNum=${board.boardNum}&vf=false">글 수정하기</a>
+                </c:if>
+
 
             </div>
         </div>
@@ -130,8 +135,7 @@
 
     <script>
         // 댓글 처리 JS
-        // 즉시 실행 함수
-        $(function () {
+        $(function () { // 즉시 실행 함수
             // 원본 글 번호
             const boardNum = '${board.boardNum}';
 
@@ -238,7 +242,7 @@
                 // 만든 태그를 댓글 목록 안에 배치 (html = innerHTML)
                 $('#replyData').html(tag);
 
-                // 댓글 수 배치 ( text = textContent);
+                // 댓글 수 배치 (text = textContent);
                 $('#replyCnt').text(replyMap.count);
 
                 // 페이지 태그 배치
@@ -250,15 +254,14 @@
             // 댓글 목록 비동기 요청처리 함수
             function getReplyList(page) {
                 fetch('/api/v1/reply/' + boardNum + "/" + page) // fetch(url)
-                    .then(res => res.json()) // .then 으로 reponse 받기
+                    .then(res => res.json()) // .then 으로 response 받기
                     .then(replyMap => {
                         console.log(replyMap);
                         makeReplyListDOM(replyMap); // 맵 받음
-
                     });
             }
 
-            // 페이지 첫 진입 비동기로 댓글 목록 불러오기
+            // 페이지 첫 진입시 비동기로 댓글 목록 불러오기
             getReplyList(1);
 
             // 페이지 버튼 클릭 이벤트 (JQuery 방식)
@@ -340,8 +343,8 @@
                 const replyId = $('#modReplyId').val();
                 // 수정된 댓글 내용
                 const replyText = $('#modReplyText').val();
-                console.log("댓글 번호 : "+replyId);
-                console.log("댓글 내용 : "+replyText);
+                console.log("댓글 번호 : " + replyId);
+                console.log("댓글 내용 : " + replyText);
 
                 const reqInfo = {
                     method: 'PUT',
@@ -370,7 +373,7 @@
             // 댓글 삭제 요청 이벤트
             $('#replyData').on('click', '#replyDelBtn', e => {
 
-                if(!confirm('삭제하시겠습니까?')){
+                if (!confirm('삭제하시겠습니까?')) {
                     return;
                 }
 
@@ -378,13 +381,13 @@
 
                 // 댓글 번호 찾아오기
                 const replyId = e.target.parentNode.parentNode.parentNode.dataset.replyid;
-                
-                console.log("댓글번호 : "+replyId);
-                
+
+                console.log("댓글번호 : " + replyId);
+
                 const reqInfo = {
-                    method : 'DELETE'
+                    method: 'DELETE'
                 };
-                
+
                 fetch('/api/v1/reply/' + replyId, reqInfo)
                     .then(res => res.text())
                     .then(msg => {
