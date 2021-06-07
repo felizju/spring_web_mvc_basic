@@ -8,13 +8,13 @@ import java.util.Map;
 @Mapper
 public interface MemberMapper {
 
-    // 회원 가입 기능
-    void register (Member member);
+    //회원 가입 기능
+    void register(Member member);
 
-    // 계정, 이메일 중복체크
+    //계정, 이메일 중복체크
     int isDuplicate(Map<String, Object> datas);
 
-    // 회원 정보 조회 기능
+    //회원정보 조회 기능
     Member getUser(String account);
 
     //자동로그인 관련 기능

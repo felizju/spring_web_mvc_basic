@@ -56,11 +56,7 @@ public class MemberController {
 
     //로그인 검증 요청처리
     @PostMapping("/loginCheck")
-    public String loginCheck(LoginInfo inputMember
-            , Model model
-            , HttpSession session
-            , HttpServletResponse response
-    ) {
+    public String loginCheck(LoginInfo inputMember , Model model , HttpSession session , HttpServletResponse response) {
         log.info("/loginCheck POST : " + inputMember);
 
         //로그인 처리
@@ -72,13 +68,13 @@ public class MemberController {
             //로그인이 성공하면 세션에 로그인한 유저정보 저장
             session.setAttribute("loginUser", memberService.getMember(inputMember.getAccount()));
 
+
             //자동로그인 여부에 따라 추가처리
             if (inputMember.isAutoLogin()) {
                 //자동로그인 처리 수행
                 log.info("자동로그인 처리 수행!");
                 memberService.keepLogin(session, response, inputMember.getAccount());
             }
-
             return "redirect:/board/list";
         }
         return "member/login-result";
@@ -103,13 +99,14 @@ public class MemberController {
 
             //로그아웃 시 자동로그인 쿠키 삭제 및 해당 회원 정보에서 session_id제거
 			/*
-			 1. loginCookie를 읽어온 뒤 해당 쿠키가 존재하는지 여부 확인
-			 2. 쿠키가 존재한다면 쿠키의 수명을 0초로 다시 설정한 후(setMaxAge사용)
-			 3. 응답객체를 통해 로컬에 0초짜리 쿠키 재전송 -> 쿠키 삭제
-			 4. service를 통해 keepLogin을 호출하여 DB컬럼 레코드 재설정
-			   (session_id -> "none", limit_time -> 현재시간으로)
+                 1. loginCookie를 읽어온 뒤 해당 쿠키가 존재하는지 여부 확인
+                 2. 쿠키가 존재한다면 쿠키의 수명을 0초로 다시 설정한 후(setMaxAge사용)
+                 3. 응답객체를 통해 로컬에 0초짜리 쿠키 재전송 -> 쿠키 삭제
+                 4. service를 통해 keepLogin을 호출하여 DB컬럼 레코드 재설정
+                   (session_id -> "none", limit_time -> 현재시간으로)
 			 */
             Cookie loginCookie = WebUtils.getCookie(request, "loginCookie");
+
             if(loginCookie != null) {
                 loginCookie.setMaxAge(0);
                 response.addCookie(loginCookie);

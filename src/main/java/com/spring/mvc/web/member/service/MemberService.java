@@ -30,7 +30,6 @@ public class MemberService {
 
     /**
      * 중복확인 기능
-     *
      * @param type    중복검사유형 (계정, 이메일)
      * @param keyword 중복검사값
      * @return 중복되었으면 true, 중복되지않았으면 false
@@ -72,15 +71,15 @@ public class MemberService {
            (쿠키값, 로그인 유지 시간)
      */
     public void keepLogin(
-            HttpSession session
-            , HttpServletResponse response
-            , String account
-    ) {
+            HttpSession session, HttpServletResponse response, String account) {
+
         //자동로그인 쿠키 생성 (세션고유아이디를 쿠키값으로 저장)
         String sessionId = session.getId();
         Cookie loginCookie = new Cookie("loginCookie", sessionId);
+
         //쿠키 설정값 세팅 (쿠키를 적용할 URL, 쿠키의 수명 등)
         loginCookie.setPath("/");
+
         //90일
         int limitTime = 60 * 60 * 24 * 90;
         loginCookie.setMaxAge(limitTime);

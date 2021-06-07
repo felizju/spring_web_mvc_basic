@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 //인터셉터: 컨트롤러에 요청이 들어가기 전, 후에 공통 처리할 일들을
-//         정해놓는 역할의 클래스(ex: 권한검증,, 자동로그인 검증 등)
+//         정해놓는 역할의 클래스(ex: 권한검증, 자동로그인 검증 등)
 @Configuration
 @Log4j2
 public class AuthInterceptor implements HandlerInterceptor {

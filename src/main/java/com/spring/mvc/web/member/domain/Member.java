@@ -19,8 +19,8 @@ public class Member {
     private Date regDate; // 가입일자
 
 
-    public void setPassword(String password){
+/*    public void setPassword(String password){
         // 비밀번호 암호화
         this.password = new BCryptPasswordEncoder().encode(password);
-    }
+    }*/
 }
