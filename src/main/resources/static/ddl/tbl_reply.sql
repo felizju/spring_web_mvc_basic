@@ -1,4 +1,4 @@
-CREATE SEQUENCE seq_reply2;
+CREATE SEQUENCE seq_reply;
 
 CREATE TABLE tbl_reply (
     reply_no NUMBER(10),

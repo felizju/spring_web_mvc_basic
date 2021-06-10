@@ -7,6 +7,7 @@ import com.spring.mvc.web.common.paging.Criteria;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,19 +25,7 @@ public class BoardService {
 //    }
 
 
-    // 게시글 등록
-    public void insertArticle(Board board){
-        boardRepository.insertArticle(board);
-    }
-
-
-    // 게시글 삭제
-    public void deleteArticle(int boardNum){
-        boardRepository.deleteArticle(boardNum);
-    }
-
-
-    // 게시글 전체 보기
+    // 게시글 목록 가져오기
     public List<Board> getArticles(Criteria criteria){
         // 내림차순 로직
 //        List<Board> temp = boardRepository.getArticles();
@@ -49,8 +38,24 @@ public class BoardService {
 //        return boardRepository.getArticles(criteria);
 
         // 검색쿼리
-        return boardRepository.getSearchArticles(criteria);
+        List<Board> articles = boardRepository.getSearchArticles(criteria);
+
+        //new 마크 기능 추가
+        //3분 이내 신규 글 new 마크 붙이기
+        for (Board article : articles) {
+            //각 게시물들의 등록시간 읽어오기 (밀리초)
+            long regTime = article.getRegDate().getTime();
+            //현재시간 읽어오기 (밀리초)
+            long now = System.currentTimeMillis();
+
+            //1일의 밀리초: 60 * 60 * 24 * 1000
+            if (now - regTime < 60 * 3 * 1000) {
+                article.setNewArticle(true);
+            }
+        }
+        return articles;
     }
+
 
     // 총 게시물 수 확인
     public int getTotalCount(Criteria criteria){
@@ -58,20 +63,44 @@ public class BoardService {
     }
 
 
-    // 게시글 내용 보기
-    public Board getArticleContent(int boardNum, boolean viewFlag){
-        Board detail = boardRepository.getArticleContent(boardNum);
-        if(viewFlag){
-            // detail.upViewCnt();  // Memory 적용
-            boardRepository.viewCntUp(boardNum);    // boardMapper 적용
+    // 게시글 등록
+    @Transactional // 트랜잭션 처리 자동화
+    public void insertArticle(Board board){
+        boardRepository.insertArticle(board);
+
+        //첨부파일 기능 추가
+        //만약에 첨부파일이 존재한다면, 추가 쿼리를 동작해야 함
+        List<String> filePathList = board.getFilePathList();
+        if (filePathList != null) {
+            for (String path : filePathList) {
+                boardRepository.addFile(path);
+            }
         }
-        return detail;
     }
 
 
-/*    public void modify(Board board){
-        boardRepository.modifyArticle(board);
-    }*/
+    // 게시글 삭제
+    public void deleteArticle(int boardNum){
+        boardRepository.deleteArticle(boardNum);
+    }
+
+
+    // 게시글 내용보기
+    @Transactional
+    public Board getArticleContent(int boardNum, boolean viewFlag){
+        Board content = boardRepository.getArticleContent(boardNum);
+        if(viewFlag){
+            // detail.upViewCnt(); // Memory 적용 - 조회 수 상승
+            boardRepository.viewCntUp(boardNum); // boardMapper 적용
+        }
+        return content;
+    }
+
+
+    // 첨부파일 경로목록 구하기
+    public List<String> getFilePaths(int boardNo){
+        return boardRepository.getFilePaths(boardNo);
+    }
 
     // 게시글 수정
     public void modifyArticle(Board board){

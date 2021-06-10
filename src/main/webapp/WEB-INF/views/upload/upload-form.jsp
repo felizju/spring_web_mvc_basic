@@ -18,17 +18,23 @@
             align-items: center;
             font-size: 1.5em;
         }
+
         .uploaded-list {
             display: flex;
         }
+
         .uploaded-list a {
             display: flex;
             flex-direction: column;
         }
+
         .uploaded-list a img {
             width: 100px;
             height: 100px;
             display: block;
+        }
+        .uploaded-list .thumbnaul-box {
+            display: flex;
         }
     </style>
 
@@ -151,6 +157,15 @@
             function checkExtType(path) {
                 //원본 파일명 추출
                 let originalFileName = path.substring(path.indexOf("_") + 1);
+                
+                const $div = document.createElement('div');
+                $div.classList.add('thumbnail-box');
+
+                const $delBtn = document.createElement('a');
+                $delBtn.classList.add('del-btn');
+                $delBtn.setAttribute('href', path);
+                $delBtn.textContent = 'X';
+
 
                 //이미지인지 확장자 체크
                 if (isImageFile(originalFileName)) {
@@ -161,25 +176,61 @@
                     const $img = document.createElement('img');
                     $img.setAttribute('src', '/loadFile?fileName=' + path);
                     $img.setAttribute('alt', originalFileName);
-                    $('.uploaded-list').append($img);
+
+                    $div.appendChild($img);
+                    $div.appendChild($delBtn);
 
                 } else {
                     //이미지가 아닌 경우 : 다운로드 링크 생성
                     const $link = document.createElement('a');
                     $link.setAttribute('href', '/loadFile?fileName=' + path);
-                   
-                    $link.innerHTML = '<img src="/img/file_icon.jpg" alt="파일아이콘"><span class="file-name">' + originalFileName + '</span>';
-                    $('.uploaded-list').append($link);
 
+                    $link.innerHTML = '<img src="/img/file_icon.jpg" alt="파일아이콘"><span class="file-name">' + originalFileName + '</span>';
+                   
+                   $div.appendChild($link);
+                   $div.appendChild($delBtn);
+                   
                 }
 
+                $('.uploaded-list').append($div);
             }
+
 
             //정규표현식으로 이미지파일 여부 확인하는 함수
             function isImageFile(originalFileName) {
                 const pattern = /jpg$|gif$|png$/i;
                 return originalFileName.match(pattern);
             }
+
+
+            //파일 삭제 비동기 요청 클릭 이벤트
+            $('.uploaded-list').on('click', '.del-btn', e => {
+
+                e.preventDefault();
+                console.log(e.target.getAttribute('href'));
+                
+                const path = e.target.getAttribute('href');
+
+                const $uploadedList = document.querySelector('.uploaded-list');
+
+                fetch('/deleteFile?fileName=' + path, {method : 'DELETE'})
+                    .then(res => res.text())
+                    .then(msg => {
+                        if (msg === 'fileDeleteSuccess') {
+                            const $thumbBox = e.target.parentNode;
+                            $uploadedList.removeChild($thumbBox);
+                            
+                        } else {
+                            alert('파일 삭제 실패!');
+                        
+                        }
+
+                    });
+
+            });
+
+
+
 
         }); //end jQuery
     </script>

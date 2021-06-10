@@ -9,31 +9,38 @@ import java.util.List;
 @Mapper
 public interface BoardMapper {
 
-    // 게시글 등록
-    void insertArticle(Board board);
+    //게시글 목록 가져오기
+    //1.페이징 없는 버전
+    List<Board> getArticles();
 
-    // 게시글 삭제
-    void deleteArticle(int boardNum);
-
-    // 게시글 내용 보기
-    Board getArticleContent(int boardNum);
-
-    // 게시글 전체 보기 1- 페이징 없는 버전
-     List<Board> getArticles();
-
-    // 게시글 전체 보기 2 - 페이징 처리 버전
+    //2.페이징 쿼리 추가버전
     List<Board> getArticles(Criteria criteria);
 
-    // 게시글 전체 보기 3 - 검색 + 페이징 처리 버전
+    //3.검색 쿼리 추가버전
     List<Board> getSearchArticles(Criteria criteria);
 
-    // 총 게시물 수 조회
+    //총 게시물 수 조회
     int getTotalCount(Criteria criteria);
 
-    // 게시글 수정
+    //게시글 등록
+    void insertArticle(Board board);
+
+    //게시글 삭제
+    void deleteArticle(int boardNum);
+
+    //게시글 내용 보기
+    Board getArticleContent(int boardNum);
+    //게시글 첨부파일 경로 얻기
+    List<String> getFilePaths(int boardNo);
+    
+    //게시글 수정
     void modifyArticle(Board board);
 
-    // 조회 수
+    //조회 수 상승
     void viewCntUp(int boardNum);
+
+    //파일 첨부 기능
+    void addFile(String filePath);
+
 
 }

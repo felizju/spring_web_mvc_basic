@@ -46,7 +46,8 @@ public class ApiControllerV2 {
 
     @GetMapping("/board")
     public Board board(){
-        return new Board(105,"김레스트","레스트api","레스트api 학습 중",0);
+        //return new Board(105,"김레스트","레스트api","레스트api 학습 중",0);
+        return null;
     }
     
     @GetMapping("/food")

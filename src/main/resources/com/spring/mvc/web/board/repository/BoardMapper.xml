@@ -3,40 +3,27 @@
 
 <mapper namespace="com.spring.mvc.web.board.repository.BoardMapper">
 
-    <!-- 게시글 등록 -->
-    <insert id="insertArticle">
-        INSERT INTO board(board_no, writer, title, content, view_cnt)
-            VALUES(seq_board.nextval, #{writer}, #{title}, #{content}, #{viewCnt})
-    </insert>
-
-    <!-- 게시글 삭제 -->
-    <delete id="deleteArticle">
-        DELETE FROM board
-            WHERE board_no = #{boardNum}
-    </delete>
 
     <resultMap id="boardMap" type="com.spring.mvc.web.board.domain.Board">
         <result property="boardNum" column="board_no" />
         <result property="viewCnt" column="view_cnt" />
+        <result property="regDate" column="reg_date" />
     </resultMap>
 
+    <!-- 게시글 목록 가져오기 -->
+    <!-- 1.페이징 없는 처리 -->
+    <!--    <select id="getArticles" resultMap="boardMap">
+            SELECT * FROM board
+        </select>-->
 
-    <!-- 페이징 없는 처리 - 게시글 전체 보기1 -->
-<!--    <select id="getArticles" resultMap="boardMap">
-        SELECT * FROM board
-    </select>-->
-
-
-    <!-- 페이징 쿼리 적용 - 게시글 전체 보기2 -->
+    <!-- 2.페이징 쿼리 적용  -->
     <select id="getArticles" resultMap="boardMap">
-<!--
-     특수기호 사용 위함
--->
-       <![CDATA[
+        <!-- 특수기호 사용 위함 -->
+        <![CDATA[
         SELECT
             board_no, writer, title, content, view_cnt
         FROM
-            (SELECT  /* +INDEX DESC(board pk_board) */
+            (SELECT  /* +INDEX_DESC(board pk_board) */
                 rownum rn, board_no, writer, title, content, view_cnt
             FROM board
             WHERE rownum <= #{page} * #{amount})
@@ -44,33 +31,32 @@
         ]]>
     </select>
 
-
-    <!-- 검색 쿼리 + 페이징 쿼리 적용 - 게시글 전체 보기3 -->
+    <!-- 3.검색 쿼리 + 페이징 쿼리 적용 -->
     <select id="getSearchArticles" resultMap="boardMap">
         <!-- 특수기호 사용 위함 -->
         <![CDATA[
         SELECT
-            board_no, writer, title, content, view_cnt
+            board_no, writer, title, content, view_cnt, reg_date
         FROM
-            (SELECT  /* +INDEX DESC(board pk_board) */
-                rownum rn, board_no, writer, title, content, view_cnt
+            (SELECT  /*+INDEX_DESC(board pk_board)*/
+                rownum rn, board_no, writer, title, content, view_cnt, reg_date
             FROM board
             WHERE
             ]]>
-                <if test = "type == 'title'">
-                    title LIKE '%' || #{keyword} || '%' AND
-                </if>
-                <if test = "type == 'writer'">
-                    writer LIKE '%' || #{keyword} || '%' AND
-                </if>
-                <if test = "type == 'content'">
-                    content LIKE '%' || #{keyword} || '%' AND
-                </if>
-                <if test = "type == 'titleAndContent'">
-                (title LIKE '%' || #{keyword} || '%'
-                    OR content '%' || #{keyword} || '%') AND
-                </if>
-                <![CDATA[
+        <if test = "type == 'title'">
+            title LIKE '%' || #{keyword} || '%' AND
+        </if>
+        <if test = "type == 'writer'">
+            writer LIKE '%' || #{keyword} || '%' AND
+        </if>
+        <if test = "type == 'content'">
+            content LIKE '%' || #{keyword} || '%' AND
+        </if>
+        <if test = "type == 'titleAndContent'">
+            (title LIKE '%' || #{keyword} || '%'
+            OR content '%' || #{keyword} || '%') AND
+        </if>
+        <![CDATA[
                     rownum <= #{page} * #{amount}
                     )
                 WHERE rn > (#{page}-1) * #{amount}
@@ -78,13 +64,10 @@
     </select>
 
 
-
-
     <!-- 총 게시글 수 조회 -->
     <select id="getTotalCount" resultType="int">
         SELECT COUNT(*) FROM board
         <if test = "type == 'title'">
-
             WHERE  title LIKE '%' || #{keyword} || '%'
         </if>
         <if test = "type == 'writer'">
@@ -97,8 +80,28 @@
             WHERE (title LIKE '%' || #{keyword} || '%'
             OR content '%' || #{keyword} || '%')
         </if>
-
     </select>
+
+
+    <!-- 게시글 등록 -->
+    <insert id="insertArticle">
+        INSERT INTO board(board_no, writer, title, content, view_cnt)
+        VALUES(seq_board.nextval, #{writer}, #{title}, #{content}, #{viewCnt})
+    </insert>
+
+
+    <!-- 첨부파일 추가 쿼리 -->
+    <insert id="addFile">
+        INSERT INTO file_upload(file_path, board_no)
+        VALUES(#{filePath}, seq_board.currval)
+    </insert>
+
+
+    <!-- 게시글 삭제 -->
+    <delete id="deleteArticle">
+        DELETE FROM board
+            WHERE board_no = #{boardNum}
+    </delete>
 
 
     <!-- 게시글 내용 보기 -->
@@ -107,6 +110,15 @@
             WHERE board_no = #{boardNum}
     </select>
 
+
+    <!--  첨부파일 경로 불러오기  -->
+    <select id="getFilePaths" resultType="string">
+        SELECT file_path
+        FROM file_upload
+        WHERE board_no = #{boardNo}
+    </select>
+
+
     <!-- 게시글 수정 -->
     <update id="modifyArticle">
         UPDATE board
@@ -114,13 +126,12 @@
         WHERE board_no = #{boardNum}
     </update>
 
+
     <!-- 조회 수 증가 -->
     <update id="viewCntUp">
         UPDATE board
             SET view_cnt = view_cnt + 1
         WHERE board_no = #{boardNum}
     </update>
-
-
 
 </mapper>

@@ -21,6 +21,17 @@ public class MemoryBoardRepository implements BoardRepository {
         boardMap.put(3, new Board("고길동", "제목33", "내용33"));
     }
 
+    // 게시글 전체 보기
+    @Override
+    public List<Board> getArticles() {
+        List<Board> boardList = new ArrayList<>();
+        for (int boardNum : boardMap.keySet()) {
+            Board board = boardMap.get(boardNum);
+            boardList.add(board);
+        }
+        return boardList;
+    }
+
 
     // 게시글 등록
     @Override
@@ -43,19 +54,14 @@ public class MemoryBoardRepository implements BoardRepository {
     }
 
 
-    // 게시글 전체 보기
+    // 게시글 수정
     @Override
-    public List<Board> getArticles() {
-        List<Board> boardList = new ArrayList<>();
-        for (int boardNum : boardMap.keySet()) {
-            Board board = boardMap.get(boardNum);
-            boardList.add(board);
-        }
-        return boardList;
+    public void modifyArticle(Board board) {
+        boardMap.put(board.getBoardNum(), board);
     }
 
 
-/*    // 게시글 수정 - 방법1
+/*    // 게시글 수정 - 방법2
     @Override
     public void modifyArticle(Board board) {
         Board target = boardMap.get(board.getBoardNum());
@@ -65,11 +71,7 @@ public class MemoryBoardRepository implements BoardRepository {
         target.setContent(board.getContent());
     }*/
 
-    // 게시글 수정 - 방법2
-    @Override
-    public void modifyArticle(Board board) {
-        boardMap.put(board.getBoardNum(), board);
-    }
+
 
 
 }

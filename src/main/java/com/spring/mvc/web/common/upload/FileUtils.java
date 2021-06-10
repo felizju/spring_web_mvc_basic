@@ -42,7 +42,6 @@ public class FileUtils {
 
         // 중복없는 파일명으로 변환
         // dog.jpg -> rgnergnerkgnerlkgnrklengrfg0igsdg-0_dog.jpg
-
         String newFileName = UUID.randomUUID().toString() + "_" + file.getOriginalFilename();
 
         // 저장 경로에 날짜별 폴더를 생성
@@ -58,7 +57,6 @@ public class FileUtils {
             e.printStackTrace();
         }
 
-
         /*
             만약 업로드한 파일이 이미지파일이라면...? 추가로 썸네일을 생성해서 저장하고,
             해당 썸네일의 경로를 클라이언트에 응답 (저장은 원본, 보여주는건 썸네일)
@@ -69,7 +67,7 @@ public class FileUtils {
         // 따라서 중복되는 경로 (D:/~/upload) 를 제외한 경로를 리턴해야 함!
             // 응답할 파일명 : /2021/06/07/파일명
 
-            // ex) ' D:/developing_yeonju/upload ' /2021/06/07
+        // ex) ' D:/developing_yeonju/upload ' /2021/06/07
         String responseFileName = newUploadPath.substring(uploadPath.length()) + File.separator + newFileName;
 
         // 이미지인지 확인하기 위해 확장자 추출

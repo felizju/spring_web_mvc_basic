@@ -73,22 +73,16 @@ public class RequestController {
     }
 
 
+    //==================== Quiz ==================//
     @GetMapping("/request/quiz")
-    public String quiz(){
+    public String quiz() {
         return "request/req-quiz";
     }
 
-
     @PostMapping("/request/quiz")
-    public String quiz(@RequestParam String userId
-                        , @RequestParam String userPw){
-        if(userId.equals("abc1234") && userPw.equals("xxx4321")){
-            System.out.println("로그인 성공!!");
-            return "request/success";
-        }else{
-            System.out.println("로그인 실패!!");
-            return "request/fail";
-        }
+    public String quiz(String userId, String userPw) {
+        return userId.equals("abc1234") && userPw.equals("xxx4321")
+                ? "request/success" : "request/fail";
     }
 
 }

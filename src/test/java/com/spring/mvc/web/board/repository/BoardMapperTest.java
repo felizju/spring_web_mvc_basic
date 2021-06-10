@@ -83,7 +83,7 @@ class BoardMapperTest {
         Criteria criteria = new Criteria();
         criteria.setPage(1);
         criteria.setAmount(10);
-        criteria.setKeyword("마이");
+        criteria.setKeyword("2");
         criteria.setType("writer");
         System.out.println("========================================================================");
 

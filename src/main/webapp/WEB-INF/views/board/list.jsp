@@ -101,6 +101,9 @@
                     <td>
                         <a
                             href="/board/detail${pageMaker.makeParam(pageMaker.criteria.page)}&boardNum=${board.boardNum}&vf=true">${board.title}</a>
+                        <c:if test="${board.newArticle}">
+                            <span class="badge rounded-pill bg-danger">new</span>
+                        </c:if>
                     </td>
                     <td>${board.viewCnt}</td>
                     <td>

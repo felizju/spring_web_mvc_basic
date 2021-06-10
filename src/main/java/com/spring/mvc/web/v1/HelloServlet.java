@@ -7,7 +7,6 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.awt.*;
 import java.io.IOException;
 import java.io.PrintWriter;
 
@@ -18,11 +17,11 @@ import java.io.PrintWriter;
 public class HelloServlet extends HttpServlet {
 
     public HelloServlet(){
-        System.out.println("헬로 서블릿 객체가 생성됨!"); // 싱글톤이기 때문에 객체생성은 한번만, 호출은 여러번
+        System.out.println("헬로 서블릿 객체가 생성됨!"); //싱글톤이기때문에 객체생성은 한번만, 호출은 여러번
     }
 
-    // http 요청이 왔을 때 WAS에 의해 자동 호출되는 메서드
-    // 용도 : 핵심 로직을 수행할 메서드
+    //http 요청이 왔을 때 WAS에 의해 자동 호출되는 메서드
+    //용도 : 핵심 로직을 수행할 메서드
     @Override
     protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 //        System.out.println("서블릿의 서비스 메서드 호출됨!");
@@ -32,16 +31,16 @@ public class HelloServlet extends HttpServlet {
         
         String age = req.getParameter("age");
         String name = req.getParameter("name");
-        System.out.println("요청정보 age = " + age);
         System.out.println("요청정보 name = " + name);
+        System.out.println("요청정보 age = " + age);
 
 //        resp.sendRedirect("http://www.daum.net");
 
-        // 웹 브라우저에 텍스트 응답
-        // 문서 타입, 문서 인코딩 설정
+        //웹 브라우저에 텍스트 응답
+        //문서 타입, 문서 인코딩 설정
 //        resp.setContentType("text/plain");
 
-        // 웹 브라우저에 html 응답 : MIME TYPE
+        //웹 브라우저에 html 응답 : MIME TYPE
         resp.setContentType(MediaType.TEXT_HTML_VALUE);
 
         resp.setCharacterEncoding("utf-8");
@@ -57,5 +56,4 @@ public class HelloServlet extends HttpServlet {
 
         w.close();
     }
-
 }

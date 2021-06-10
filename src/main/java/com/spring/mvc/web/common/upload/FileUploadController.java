@@ -7,19 +7,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 @Controller
@@ -95,9 +90,8 @@ public class FileUploadController {
         //파일을 찾아본 후 없으면 404 상태코드와 함께 에러 리턴
         if(!file.exists()) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
-        try{
-            //2.서버에 해당 파일이 지정되어 있다면 InputStream 을 통해 파일을 로딩
-            InputStream in = new FileInputStream(file);
+        //2.서버에 해당 파일이 지정되어 있다면 InputStream 을 통해 파일을 로딩
+        try( InputStream in = new FileInputStream(file)){ // close 꼭 해주기!
 
             //3.응답 헤더에 파일의 컨텐츠 미디어 타입을 설정
             // ex) image/gif, text/html, application/json
@@ -112,7 +106,7 @@ public class FileUploadController {
             if (mediaType != null) {
                 //이미지인 경우
                 headers.setContentType(mediaType);
-                
+
             } else {
                 //이미지가 아닌 경우 : 다운로드 기능을 활성화하는 미디어타입 설정
                 headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
@@ -135,5 +129,54 @@ public class FileUploadController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    //서버에 저장된 파일을 삭제하는 비동기 요청처리
+    //URI : /deleteFile?fileName=/2021/06/09/andfsndfsddkflsndflk_abc.txt
+
+    @DeleteMapping("/deleteFile")
+    @ResponseBody
+    public ResponseEntity<String> deleteFile(String fileName) throws IOException {
+    //    http://localhost:8181/deleteFile?fileName=/2021/06/09/5c52a7bc-db52-4b19-9a91-f2847ad85873_새 텍스트 문서.txt
+        log.info("/deleteFile DELETE! - "+fileName);
+
+        try {   //fileIO 경우 예외처리 항상 해주는 것이 좋음
+            //파일 삭제
+            //이 경우 이미지파일은 썸네일만 삭제되고 원본이 남게 됨
+            File file = new File(UPLOAD_PATH + fileName);
+            file.delete();
+
+            //따라서 이미지인 경우 원본까지 지우도록 해야함
+            if (isImage(fileName)) {
+                //원본을 지우는 코드
+                //fileName => 썸네일 이미지 경로 : /2021/06/09/s_dsbfajdskfbsdkjfb_abc.jpg
+                //originalName =>  원본 이미지 경로 : /2021/06/09/dsbfajdskfbsdkjfb_abc.jpg
+                int lastSlashIdx = fileName.lastIndexOf("/");
+                String originalName = fileName.substring(0, lastSlashIdx + 1) + fileName.substring(lastSlashIdx + 3);
+
+                log.info("originalFileName - "+originalName);
+
+
+                File origin = new File(UPLOAD_PATH + originalName);
+                origin.delete();
+            }
+            return new ResponseEntity<>("fileDeleteSuccess", HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+
+    //이미지 판별
+    private boolean isImage(String fileName) {
+        String ext = FileUtils.getFileExtension(fileName);
+        MediaType mediaType = FileUtils.getMediaType(ext);
+        return mediaType != null;
+        //리팩토링 코드
+//        return FileUtils.getMediaType(FileUtils.getFileExtension(fileName)) != null;
+    }
+
+
+
+
 
 }

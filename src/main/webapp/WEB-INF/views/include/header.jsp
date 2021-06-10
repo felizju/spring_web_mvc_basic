@@ -3,7 +3,7 @@
 
 <header>
     <h1>
-        <a href="/board/list">Spring Web Basic Board</a>
+       <a href="/board/list">Spring Web Basic Board</a>
     </h1>
     <div class="btn-box">
         <c:if test="${loginUser == null}">
