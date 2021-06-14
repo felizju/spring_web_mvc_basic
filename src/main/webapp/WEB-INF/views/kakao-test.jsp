@@ -12,10 +12,24 @@
 
 <body>
 
-    <a href="https://kauth.kakao.com/oauth/authorize?client_id=${appKey}&redirect_uri=http://localhost:8181${redirectUri}&response_type=code">
-        <img src="//mud-kage.kakao.com/14/dn/btqbjxsO6vP/KPiGpdnsubSq3a0PHEGUK1/o.jpg" alt="카카오 로그인">
-    </a>
+    <c:if test="${loginUser == null}">
+        <a
+            href="https://kauth.kakao.com/oauth/authorize?client_id=${appKey}&redirect_uri=http://localhost:8181${redirectUri}&response_type=code">
+            <img src="//mud-kage.kakao.com/14/dn/btqbjxsO6vP/KPiGpdnsubSq3a0PHEGUK1/o.jpg" alt="카카오 로그인">
+        </a>
+    </c:if>
 
+    <c:if test="${loginUser != null}">
+        <h1>${loginUser.name}님 카카오 로그인 성공!</h1>
+        <img src="${profile_path}" alt="프로필 사진">
+        <br>
+        <p>
+            # 이메일 : ${loginUser.email}
+        </p>
+
+        <a href="/kakao/logout">카카오 로그아웃</a>
+        
+    </c:if>
 </body>
 
 </html>
