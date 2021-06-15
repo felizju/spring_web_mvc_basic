@@ -12,7 +12,6 @@ import java.io.BufferedWriter;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
@@ -63,7 +62,7 @@ public class KakaoService implements OAuthValue, OAuthService {
         //요청 헤더정보 설정
         conn.setRequestProperty("Authorization", "Bearer " + accessToken);//Bearer다음 한 칸 띄고, accessToken
 
-        //요청 보내기기
+        //요청 보내기
         try (BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(conn.getOutputStream()))) {
 
             //응답 상태코드 200이면 성공
@@ -113,7 +112,7 @@ public class KakaoService implements OAuthValue, OAuthService {
 
             //추출한 정보를 맵 또는 카카오 전용 도메인 객체를 만들어서 담아, 리턴
             Map<String, Object> kakakoInfoMap = new HashMap<>();
-            kakakoInfoMap.put("nickName", nickname);
+            kakakoInfoMap.put("nickname", nickname);
             kakakoInfoMap.put("profileImg", profileImgPath);
             kakakoInfoMap.put("email", email);
 

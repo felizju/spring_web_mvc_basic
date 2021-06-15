@@ -47,7 +47,7 @@ public class KakaoController {
             Member member = new Member();
             member.setAccount((String) userInfo.get("email"));
             member.setEmail((String) userInfo.get("email"));
-            member.setName((String) userInfo.get("nickName"));
+            member.setName((String) userInfo.get("nickname"));
 
             //세션에 저장
             session.setAttribute("loginUser", member);
